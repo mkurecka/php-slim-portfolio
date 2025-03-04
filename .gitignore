@@ -1,0 +1,16 @@
+.idea/
+.github/
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log*
+yarn.lock
+.vscode/
+/coverage/
+/vendor/
+/logs/*
+!/logs/README.md
+.phpunit.result.cache
+
+.env
+data/

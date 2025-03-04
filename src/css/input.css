@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+@layer components {
+  .prose {
+    max-width: 65ch;
+  }
+  
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #6366f1, #a855f7);
+  }
+  
+  /* Markdown styles */
+  .prose h1 {
+    @apply text-3xl font-bold mt-8 mb-4;
+  }
+
+  .prose h2 {
+    @apply text-2xl font-bold mt-6 mb-3;
+  }
+
+  .prose h3 {
+    @apply text-xl font-bold mt-5 mb-2;
+  }
+
+  .prose h4 {
+    @apply text-lg font-bold mt-4 mb-2;
+  }
+
+  .prose p {
+    @apply mb-4;
+  }
+
+  .prose ul {
+    @apply list-disc pl-8 mb-4;
+  }
+
+  .prose ol {
+    @apply list-decimal pl-8 mb-4;
+  }
+
+  .prose li {
+    @apply mb-1;
+  }
+
+  .prose a {
+    @apply text-blue-600 hover:text-blue-800 underline;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic my-4;
+  }
+
+  .prose code {
+    @apply bg-gray-100 rounded px-1 py-0.5 font-mono text-sm;
+  }
+
+  .prose pre {
+    @apply bg-gray-100 rounded p-4 overflow-x-auto mb-4;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+
+  .prose img {
+    @apply max-w-full h-auto my-4 rounded;
+  }
+
+  .prose hr {
+    @apply my-8 border-t border-gray-300;
+  }
+  
+  .youtube-container {
+    @apply relative w-full pt-[56.25%] mt-6 mb-6;
+  }
+  
+  .youtube-container iframe {
+    @apply absolute top-0 left-0 w-full h-full rounded-xl shadow-lg;
+  }
+}
