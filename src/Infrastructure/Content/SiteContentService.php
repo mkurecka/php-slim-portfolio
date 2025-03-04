@@ -7,7 +7,7 @@ class SiteContentService
     private string $contentFilePath;
     private array $content;
 
-    public function __construct(string $dataDir = null)
+    public function __construct(?string $dataDir = null)
     {
         $this->contentFilePath = ($dataDir ?? __DIR__ . '/../../../data') . '/site_content.json';
         $this->loadContent();

@@ -71,5 +71,17 @@ return function (ContainerBuilder $containerBuilder) {
         App\Infrastructure\Content\SiteContentService::class => function (ContainerInterface $c) {
             return new App\Infrastructure\Content\SiteContentService();
         },
+        
+        // Contact repository
+        App\Domain\Contact\ContactRepository::class => function (ContainerInterface $c) {
+            return new App\Domain\Contact\ContactRepository();
+        },
+        
+        // Webhook service
+        App\Infrastructure\Webhook\WebhookService::class => function (ContainerInterface $c) {
+            return new App\Infrastructure\Webhook\WebhookService(
+                $c->get(App\Infrastructure\Content\SiteContentService::class)
+            );
+        },
     ]);
 };

@@ -57,6 +57,12 @@
             <a href="/admin/content" class="block text-gray-700 hover:text-indigo-600 transition-colors">
                 <i class="fas fa-file-alt mr-2"></i> Edit Site Content
             </a>
+            <a href="/admin/contact" class="block text-gray-700 hover:text-indigo-600 transition-colors">
+                <i class="fas fa-envelope mr-2"></i> View Contact Messages
+            </a>
+            <a href="/admin/webhook" class="block text-gray-700 hover:text-indigo-600 transition-colors">
+                <i class="fas fa-link mr-2"></i> Webhook Settings
+            </a>
             <a href="/" target="_blank" class="block text-gray-700 hover:text-indigo-600 transition-colors">
                 <i class="fas fa-external-link-alt mr-2"></i> View Website
             </a>

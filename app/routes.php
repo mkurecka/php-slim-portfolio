@@ -8,9 +8,11 @@ use App\Application\Actions\CV\CVAction;
 use App\Application\Actions\HomeAction;
 use App\Application\Actions\Admin\AuthController;
 use App\Application\Actions\Admin\BlogController;
+use App\Application\Actions\Admin\ContactController;
 use App\Application\Actions\Admin\CVController;
 use App\Application\Actions\Admin\DashboardController;
 use App\Application\Actions\Admin\SiteContentAction;
+use App\Application\Actions\Admin\WebhookController;
 use App\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -59,6 +61,15 @@ return function (App $app) {
         $group->get('/content', [SiteContentAction::class, 'listSections']);
         $group->get('/content/{section}', [SiteContentAction::class, 'editSection']);
         $group->post('/content/{section}', [SiteContentAction::class, 'updateSection']);
+        
+        // Contact submissions management
+        $group->get('/contact', [ContactController::class, 'index']);
+        $group->get('/contact/delete/{id}', [ContactController::class, 'delete']);
+        
+        // Webhook management
+        $group->get('/webhook', [WebhookController::class, 'settings']);
+        $group->post('/webhook', [WebhookController::class, 'updateSettings']);
+        $group->get('/webhook/clear-logs', [WebhookController::class, 'clearLogs']);
     })->add(AuthMiddleware::class);
     
     // Error handling for 404 Not Found

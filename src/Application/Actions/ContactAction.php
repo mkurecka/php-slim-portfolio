@@ -2,16 +2,28 @@
 
 namespace App\Application\Actions;
 
+use App\Domain\Contact\ContactRepository;
+use App\Domain\Contact\ContactSubmission;
 use App\Infrastructure\Content\SiteContentService;
+use App\Infrastructure\Webhook\WebhookService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\PhpRenderer;
 
 class ContactAction extends BaseAction
 {
-    public function __construct(PhpRenderer $renderer, SiteContentService $contentService)
-    {
+    private ContactRepository $contactRepository;
+    private WebhookService $webhookService;
+
+    public function __construct(
+        PhpRenderer $renderer, 
+        SiteContentService $contentService,
+        ContactRepository $contactRepository,
+        WebhookService $webhookService
+    ) {
         parent::__construct($renderer, $contentService);
+        $this->contactRepository = $contactRepository;
+        $this->webhookService = $webhookService;
     }
 
     public function showForm(Request $request, Response $response): Response
@@ -59,17 +71,29 @@ class ContactAction extends BaseAction
             ]);
         }
         
-        // In a real application, you would send the email here
-        // For demonstration, we'll just return a success message
+        // Create and save the contact submission
+        $submission = new ContactSubmission($name, $email, $subject, $message);
+        $saveSuccess = $this->contactRepository->save($submission);
         
-        // Build message for email
+        if (!$saveSuccess) {
+            return $this->renderWithContent($response, 'contact.php', [
+                'title' => 'Contact | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
+                'error' => 'There was an error saving your message. Please try again later.',
+                'content' => $contactContent,
+                'contact_info' => $contactInfo
+            ]);
+        }
+        
+        // Send to webhook if enabled
+        $this->webhookService->sendContactSubmission($submission);
+        // Note: We don't check the webhook result as we don't want to fail the form submission
+        // if the webhook fails. The webhook failures are logged.
+        
+        // Build email content (for reference, not sending)
         $emailContent = "Name: $name\n";
         $emailContent .= "Email: $email\n";
         $emailContent .= "Subject: $subject\n\n";
         $emailContent .= $message;
-        
-        // Attempt to send email (commented out for demo)
-        // mail($contactInfo['email'], "Contact Form: $subject", $emailContent, "From: $email");
         
         // Get success message from content
         $successMessage = $contactContent['form']['success'] ?? 'Your message has been sent. I\'ll get back to you soon!';
