@@ -19,7 +19,7 @@
                         </div>
                         <div>
                             <h3 class="font-medium text-gray-800"><?= $content['contact_info']['sections']['email']['title'] ?? 'Email' ?></h3>
-                            <a href="mailto:<?= htmlspecialchars($contact_info['email'] ?? 'contact@example.com') ?>" class="text-indigo-600 hover:text-indigo-800 transition-colors"><?= htmlspecialchars($contact_info['email'] ?? 'contact@example.com') ?></a>
+                            <a href="mailto:<?= htmlspecialchars($content['contact_info']['sections']['email']['email'] ?? 'contact@example.com') ?>" class="text-indigo-600 hover:text-indigo-800 transition-colors"><?= htmlspecialchars($content['contact_info']['sections']['email']['email'] ?? 'contact@example.com') ?></a>
                         </div>
                     </div>
                     
