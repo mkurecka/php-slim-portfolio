@@ -2,24 +2,26 @@
 
 namespace App\Application\Actions\Blog;
 
+use App\Application\Actions\BaseAction;
 use App\Domain\Blog\BlogRepository;
+use App\Infrastructure\Content\SiteContentService;
 use App\Infrastructure\Markdown\MarkdownService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\PhpRenderer;
 
-class BlogAction
+class BlogAction extends BaseAction
 {
-    private PhpRenderer $renderer;
     private BlogRepository $blogRepository;
     private MarkdownService $markdownService;
 
     public function __construct(
         PhpRenderer $renderer, 
         BlogRepository $blogRepository,
-        MarkdownService $markdownService
+        MarkdownService $markdownService,
+        SiteContentService $contentService
     ) {
-        $this->renderer = $renderer;
+        parent::__construct($renderer, $contentService);
         $this->blogRepository = $blogRepository;
         $this->markdownService = $markdownService;
     }
@@ -39,7 +41,10 @@ class BlogAction
             return strtotime($b->getDate()) - strtotime($a->getDate());
         });
         
-        return $this->renderer->render($response, 'blog/index.php', [
+        // Get global content for the site name
+        $globalContent = $this->contentService->getContent('global');
+        
+        return $this->renderWithContent($response, 'blog/index.php', [
             'title' => 'Blog | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
             'posts' => $posts
         ]);
@@ -54,7 +59,10 @@ class BlogAction
             return $response->withStatus(404);
         }
         
-        return $this->renderer->render($response, 'blog/post.php', [
+        // Get global content for the site name
+        $globalContent = $this->contentService->getContent('global');
+        
+        return $this->renderWithContent($response, 'blog/post.php', [
             'title' => $post->getTitle() . ' | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
             'post' => $post,
             'markdownService' => $this->markdownService
