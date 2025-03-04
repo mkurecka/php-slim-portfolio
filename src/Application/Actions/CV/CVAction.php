@@ -23,7 +23,7 @@ class CVAction
         $cv = $this->cvService->getCV();
         
         return $this->renderer->render($response, 'cv/index.php', [
-            'title' => 'CV | ' . ($_ENV['SITE_NAME'] ?? 'Michal Kurecka'),
+            'title' => 'CV | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
             'cv' => $cv
         ]);
     }

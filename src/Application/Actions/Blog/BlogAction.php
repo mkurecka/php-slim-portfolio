@@ -40,7 +40,7 @@ class BlogAction
         });
         
         return $this->renderer->render($response, 'blog/index.php', [
-            'title' => 'Blog | ' . ($_ENV['SITE_NAME'] ?? 'Michal Kurecka'),
+            'title' => 'Blog | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
             'posts' => $posts
         ]);
     }
@@ -55,7 +55,7 @@ class BlogAction
         }
         
         return $this->renderer->render($response, 'blog/post.php', [
-            'title' => $post->getTitle() . ' | ' . ($_ENV['SITE_NAME'] ?? 'Michal Kurecka'),
+            'title' => $post->getTitle() . ' | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
             'post' => $post,
             'markdownService' => $this->markdownService
         ]);
