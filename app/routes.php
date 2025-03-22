@@ -41,6 +41,9 @@ return function (App $app) {
         return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
     });
     
+    // API Webhook routes
+    $app->post('/api/webhook/blog', [WebhookController::class, 'handleBlogWebhook']);
+    
     // Protected admin routes
     $app->group('/admin', function ($group) {
         $group->get('/dashboard', [DashboardController::class, 'index']);

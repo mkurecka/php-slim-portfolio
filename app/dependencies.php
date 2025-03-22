@@ -80,7 +80,18 @@ return function (ContainerBuilder $containerBuilder) {
         // Webhook service
         App\Infrastructure\Webhook\WebhookService::class => function (ContainerInterface $c) {
             return new App\Infrastructure\Webhook\WebhookService(
-                $c->get(App\Infrastructure\Content\SiteContentService::class)
+                $c->get(App\Infrastructure\Content\SiteContentService::class),
+                $c->get(BlogRepository::class)
+            );
+        },
+        
+        // WebhookController
+        App\Application\Actions\Admin\WebhookController::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\Admin\WebhookController(
+                $c->get('admin.renderer'),
+                $c->get(App\Infrastructure\Content\SiteContentService::class),
+                $c->get(App\Infrastructure\Webhook\WebhookService::class),
+                $c->get(BlogRepository::class)
             );
         },
     ]);
