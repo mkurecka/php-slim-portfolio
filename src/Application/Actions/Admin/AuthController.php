@@ -33,8 +33,9 @@ class AuthController
         $token = $this->authService->login($username, $password);
         
         if ($token) {
-            // Set JWT as a cookie
-            $response = $response->withHeader('Set-Cookie', 'jwt=' . $token . '; Path=/; HttpOnly; SameSite=Strict');
+            // Set JWT as a cookie with 30-day expiration
+            $expires = gmdate('D, d M Y H:i:s T', time() + 2592000);
+            $response = $response->withHeader('Set-Cookie', 'jwt=' . $token . '; Path=/; HttpOnly; SameSite=Strict; Expires=' . $expires);
             
             // Redirect to admin dashboard
             return $response->withHeader('Location', '/admin/dashboard')

@@ -43,7 +43,7 @@ class AuthService
     private function generateToken(): string
     {
         $issuedAt = time();
-        $expirationTime = $issuedAt + 3600; // Valid for 1 hour
+        $expirationTime = $issuedAt + 2592000; // Valid for 30 days (was 1 hour)
         
         $payload = [
             'iat' => $issuedAt,
