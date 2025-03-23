@@ -140,6 +140,12 @@ class WebhookService
             $data['tags'] = $data['tags'] ?? [];
             $data['youtube_url'] = $data['youtube_url'] ?? null;
             
+            // Process featured image if provided
+            $featuredImage = null;
+            if (!empty($data['featured_image'])) {
+                $featuredImage = $this->processExternalImage($data['featured_image'], $data['slug']);
+            }
+            
             // Create blog post object (ID will be assigned by the repository)
             $blogPost = BlogPost::fromArray([
                 'id' => 0, // Will be assigned by repository
@@ -149,7 +155,8 @@ class WebhookService
                 'excerpt' => $data['excerpt'],
                 'content' => $data['content'],
                 'tags' => $data['tags'],
-                'youtube_url' => $data['youtube_url']
+                'youtube_url' => $data['youtube_url'],
+                'featured_image' => $featuredImage
             ]);
             
             // Save blog post
@@ -209,6 +216,67 @@ class WebhookService
         }
         
         return $text;
+    }
+    
+    /**
+     * Process an external image URL
+     */
+    private function processExternalImage(string $imageUrl, string $slug): string
+    {
+        // Check if the URL is valid
+        if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+            return $imageUrl; // Return as is if not a valid URL
+        }
+        
+        // If the URL is from our own domain, just return it
+        $host = parse_url($imageUrl, PHP_URL_HOST);
+        if ($host === $_SERVER['HTTP_HOST']) {
+            return $imageUrl;
+        }
+        
+        // Set up uploads directory
+        $uploadsDir = __DIR__ . '/../../../public/uploads/blog';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0755, true);
+        }
+        
+        // Download the image
+        $imageData = @file_get_contents($imageUrl);
+        if ($imageData === false) {
+            return $imageUrl; // Return original URL if download fails
+        }
+        
+        // Determine file extension from content type
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->buffer($imageData);
+        
+        // Determine extension based on mime type
+        switch ($mimeType) {
+            case 'image/jpeg':
+                $extension = 'jpg';
+                break;
+            case 'image/png':
+                $extension = 'png';
+                break;
+            case 'image/gif':
+                $extension = 'gif';
+                break;
+            case 'image/webp':
+                $extension = 'webp';
+                break;
+            default:
+                $extension = 'jpg';
+        }
+        
+        // Generate a unique filename
+        $basename = bin2hex(random_bytes(8));
+        $filename = sprintf('%s-%s.%s', $slug, $basename, $extension);
+        $filePath = $uploadsDir . DIRECTORY_SEPARATOR . $filename;
+        
+        // Save the image
+        file_put_contents($filePath, $imageData);
+        
+        return '/uploads/blog/' . $filename;
     }
     
     /**

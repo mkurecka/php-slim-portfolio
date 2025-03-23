@@ -43,7 +43,8 @@ The request body should be a JSON object with the following structure:
   "slug": "optional-custom-slug",
   "date": "2025-03-22",
   "tags": ["tag1", "tag2"],
-  "youtube_url": "https://youtube.com/watch?v=..."
+  "youtube_url": "https://youtube.com/watch?v=...",
+  "featured_image": "https://example.com/images/my-image.jpg"
 }
 ```
 
@@ -59,6 +60,7 @@ The request body should be a JSON object with the following structure:
 - `date`: The publication date in YYYY-MM-DD format. If not provided, the current date will be used.
 - `tags`: An array of tags for the blog post. If not provided, an empty array will be used.
 - `youtube_url`: A URL to a YouTube video associated with the post. If not provided, it will be set to null.
+- `featured_image`: A URL to an image to use as the featured image for the post. If provided, the image will be downloaded and saved locally.
 
 ## Response Format
 
@@ -133,7 +135,8 @@ curl -X POST \
   -d '{
     "title": "My New Blog Post",
     "content": "## Hello World\n\nThis is my first blog post created via the API.",
-    "tags": ["api", "test"]
+    "tags": ["api", "test"],
+    "featured_image": "https://example.com/images/blog-image.jpg"
   }'
 ```
 
@@ -147,7 +150,8 @@ $url = 'http://example.com/api/webhook/blog';
 $data = [
     'title' => 'My New Blog Post',
     'content' => "## Hello World\n\nThis is my first blog post created via the API.",
-    'tags' => ['api', 'test']
+    'tags' => ['api', 'test'],
+    'featured_image' => 'https://example.com/images/blog-image.jpg'
 ];
 
 $jsonData = json_encode($data);

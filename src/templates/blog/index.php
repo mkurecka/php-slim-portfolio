@@ -10,6 +10,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <?php foreach ($posts as $post): ?>
             <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                <?php if ($post->hasFeaturedImage()): ?>
+                <a href="/blog/<?= htmlspecialchars($post->getSlug()) ?>" class="block">
+                    <div class="h-48 overflow-hidden">
+                        <img src="<?= htmlspecialchars($post->getFeaturedImage()) ?>" alt="<?= htmlspecialchars($post->getTitle()) ?>" class="w-full h-full object-cover">
+                    </div>
+                </a>
+                <?php endif; ?>
                 <div class="p-6">
                     <div class="flex items-center text-gray-500 text-sm mb-2">
                         <span><?= htmlspecialchars($post->getDate()) ?></span>

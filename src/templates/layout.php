@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Michal Kurecka | PHP & AI Developer' ?></title>
+    
+    <?php if (isset($post) && $post->hasFeaturedImage()): ?>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://<?= $_SERVER['HTTP_HOST'] ?>/blog/<?= $post->getSlug() ?>">
+    <meta property="og:title" content="<?= htmlspecialchars($post->getTitle()) ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($post->getExcerpt()) ?>">
+    <meta property="og:image" content="https://<?= $_SERVER['HTTP_HOST'] . htmlspecialchars($post->getFeaturedImage()) ?>">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://<?= $_SERVER['HTTP_HOST'] ?>/blog/<?= $post->getSlug() ?>">
+    <meta property="twitter:title" content="<?= htmlspecialchars($post->getTitle()) ?>">
+    <meta property="twitter:description" content="<?= htmlspecialchars($post->getExcerpt()) ?>">
+    <meta property="twitter:image" content="https://<?= $_SERVER['HTTP_HOST'] . htmlspecialchars($post->getFeaturedImage()) ?>">
+    <?php endif; ?>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {

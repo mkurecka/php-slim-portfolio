@@ -12,6 +12,7 @@ class BlogPost
     private string $content;
     private array $tags;
     private ?string $youtube_url;
+    private ?string $featured_image;
 
     public function __construct(
         int $id,
@@ -21,7 +22,8 @@ class BlogPost
         string $excerpt,
         string $content,
         array $tags,
-        ?string $youtube_url = null
+        ?string $youtube_url = null,
+        ?string $featured_image = null
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -31,6 +33,7 @@ class BlogPost
         $this->content = $content;
         $this->tags = $tags;
         $this->youtube_url = $youtube_url;
+        $this->featured_image = $featured_image;
     }
 
     public function getId(): int
@@ -77,6 +80,16 @@ class BlogPost
     {
         return !empty($this->youtube_url);
     }
+    
+    public function getFeaturedImage(): ?string
+    {
+        return $this->featured_image;
+    }
+    
+    public function hasFeaturedImage(): bool
+    {
+        return !empty($this->featured_image);
+    }
 
     public function getTags(): array
     {
@@ -94,6 +107,7 @@ class BlogPost
             'content' => $this->content,
             'tags' => $this->tags,
             'youtube_url' => $this->youtube_url,
+            'featured_image' => $this->featured_image,
         ];
     }
 
@@ -107,7 +121,8 @@ class BlogPost
             $data['excerpt'] ?? '',
             $data['content'] ?? '',
             $data['tags'] ?? [],
-            $data['youtube_url'] ?? null
+            $data['youtube_url'] ?? null,
+            $data['featured_image'] ?? null
         );
     }
 }

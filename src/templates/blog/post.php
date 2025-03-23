@@ -23,6 +23,18 @@
     </div>
 </section>
 
+<?php if ($post->hasFeaturedImage()): ?>
+<section class="py-6 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+            <div class="rounded-lg overflow-hidden shadow-md">
+                <img src="<?= htmlspecialchars($post->getFeaturedImage()) ?>" alt="<?= htmlspecialchars($post->getTitle()) ?>" class="w-full h-auto">
+            </div>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <?php
 // Get and display promo content if enabled
 $promoRepository = $container->get(\App\Domain\Promo\BlogPromoRepository::class);
