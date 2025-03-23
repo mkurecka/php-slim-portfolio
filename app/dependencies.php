@@ -6,6 +6,7 @@ use App\Application\Settings\SettingsInterface;
 use App\Auth\AuthService;
 use App\Domain\Blog\BlogRepository;
 use App\Domain\CV\CVService;
+use App\Domain\Partner\PartnerLinkRepository;
 use App\Infrastructure\Markdown\MarkdownService;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
@@ -92,6 +93,36 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get(App\Infrastructure\Content\SiteContentService::class),
                 $c->get(App\Infrastructure\Webhook\WebhookService::class),
                 $c->get(BlogRepository::class)
+            );
+        },
+        
+        // Partner Link Repository
+        PartnerLinkRepository::class => function (ContainerInterface $c) {
+            return new PartnerLinkRepository();
+        },
+        
+        // Partner Controller
+        App\Application\Actions\Admin\PartnerController::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\Admin\PartnerController(
+                $c->get('admin.renderer'),
+                $c->get(PartnerLinkRepository::class)
+            );
+        },
+        
+        // Dashboard Controller
+        App\Application\Actions\Admin\DashboardController::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\Admin\DashboardController(
+                $c->get('admin.renderer'),
+                $c->get(BlogRepository::class),
+                $c->get(PartnerLinkRepository::class),
+                $c
+            );
+        },
+        
+        // Partner Redirect Action
+        App\Application\Actions\Partner\PartnerRedirectAction::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\Partner\PartnerRedirectAction(
+                $c->get(PartnerLinkRepository::class)
             );
         },
     ]);

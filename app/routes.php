@@ -11,8 +11,10 @@ use App\Application\Actions\Admin\BlogController;
 use App\Application\Actions\Admin\ContactController;
 use App\Application\Actions\Admin\CVController;
 use App\Application\Actions\Admin\DashboardController;
+use App\Application\Actions\Admin\PartnerController;
 use App\Application\Actions\Admin\SiteContentAction;
 use App\Application\Actions\Admin\WebhookController;
+use App\Application\Actions\Partner\PartnerRedirectAction;
 use App\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -40,6 +42,9 @@ return function (App $app) {
     $app->get('/admin', function (Request $request, Response $response) {
         return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
     });
+    
+    // Partner redirect route - must be after admin routes to avoid conflicts
+    $app->get('/{slug}', PartnerRedirectAction::class);
     
     // API Webhook routes
     $app->post('/api/webhook/blog', [WebhookController::class, 'handleBlogWebhook']);
@@ -73,6 +78,14 @@ return function (App $app) {
         $group->get('/webhook', [WebhookController::class, 'settings']);
         $group->post('/webhook', [WebhookController::class, 'updateSettings']);
         $group->get('/webhook/clear-logs', [WebhookController::class, 'clearLogs']);
+        
+        // Partner links management
+        $group->get('/partner', [PartnerController::class, 'index']);
+        $group->get('/partner/new', [PartnerController::class, 'newLink']);
+        $group->post('/partner/create', [PartnerController::class, 'createLink']);
+        $group->get('/partner/edit/{id}', [PartnerController::class, 'editLink']);
+        $group->post('/partner/update/{id}', [PartnerController::class, 'updateLink']);
+        $group->get('/partner/delete/{id}', [PartnerController::class, 'deleteLink']);
     })->add(AuthMiddleware::class);
     
     // Error handling for 404 Not Found
