@@ -12,6 +12,7 @@ use App\Application\Actions\Admin\ContactController;
 use App\Application\Actions\Admin\CVController;
 use App\Application\Actions\Admin\DashboardController;
 use App\Application\Actions\Admin\PartnerController;
+use App\Application\Actions\Admin\PromoController;
 use App\Application\Actions\Admin\SiteContentAction;
 use App\Application\Actions\Admin\WebhookController;
 use App\Application\Actions\Partner\PartnerRedirectAction;
@@ -86,6 +87,10 @@ return function (App $app) {
         $group->get('/partner/edit/{id}', [PartnerController::class, 'editLink']);
         $group->post('/partner/update/{id}', [PartnerController::class, 'updateLink']);
         $group->get('/partner/delete/{id}', [PartnerController::class, 'deleteLink']);
+        
+        // Blog promo management
+        $group->get('/promo', [PromoController::class, 'edit']);
+        $group->post('/promo/update', [PromoController::class, 'update']);
     })->add(AuthMiddleware::class);
     
     // Error handling for 404 Not Found

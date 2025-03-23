@@ -26,6 +26,9 @@
                 <a href="/admin/cv" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-700 <?= strpos($_SERVER['REQUEST_URI'], '/admin/cv') !== false ? 'bg-indigo-700' : '' ?>">
                     <i class="fas fa-file-alt mr-2"></i> CV
                 </a>
+                <a href="/admin/promo" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-700 <?= strpos($_SERVER['REQUEST_URI'], '/admin/promo') !== false ? 'bg-indigo-700' : '' ?>">
+                    <i class="fas fa-bullhorn mr-2"></i> Blog Promo
+                </a>
             </nav>
             
             <div class="absolute bottom-0 left-0 w-64 px-6 py-6">
@@ -54,6 +57,9 @@
                 </a>
                 <a href="/admin/cv" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-700 <?= strpos($_SERVER['REQUEST_URI'], '/admin/cv') !== false ? 'bg-indigo-700' : '' ?>">
                     <i class="fas fa-file-alt mr-2"></i> CV
+                </a>
+                <a href="/admin/promo" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-700 <?= strpos($_SERVER['REQUEST_URI'], '/admin/promo') !== false ? 'bg-indigo-700' : '' ?>">
+                    <i class="fas fa-bullhorn mr-2"></i> Blog Promo
                 </a>
                 <a href="/admin/logout" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-700">
                     <i class="fas fa-sign-out-alt mr-2"></i> Logout

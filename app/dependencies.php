@@ -7,6 +7,7 @@ use App\Auth\AuthService;
 use App\Domain\Blog\BlogRepository;
 use App\Domain\CV\CVService;
 use App\Domain\Partner\PartnerLinkRepository;
+use App\Domain\Promo\BlogPromoRepository;
 use App\Infrastructure\Markdown\MarkdownService;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
@@ -68,6 +69,17 @@ return function (ContainerBuilder $containerBuilder) {
             return new MarkdownService();
         },
         
+        // Blog Action
+        App\Application\Actions\Blog\BlogAction::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\Blog\BlogAction(
+                $c->get(PhpRenderer::class),
+                $c->get(BlogRepository::class),
+                $c->get(MarkdownService::class),
+                $c->get(App\Infrastructure\Content\SiteContentService::class),
+                $c
+            );
+        },
+        
         // Site Content service
         App\Infrastructure\Content\SiteContentService::class => function (ContainerInterface $c) {
             return new App\Infrastructure\Content\SiteContentService();
@@ -123,6 +135,19 @@ return function (ContainerBuilder $containerBuilder) {
         App\Application\Actions\Partner\PartnerRedirectAction::class => function (ContainerInterface $c) {
             return new App\Application\Actions\Partner\PartnerRedirectAction(
                 $c->get(PartnerLinkRepository::class)
+            );
+        },
+        
+        // Blog Promo Repository
+        BlogPromoRepository::class => function (ContainerInterface $c) {
+            return new BlogPromoRepository();
+        },
+        
+        // Promo Controller
+        App\Application\Actions\Admin\PromoController::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\Admin\PromoController(
+                $c->get('admin.renderer'),
+                $c->get(BlogPromoRepository::class)
             );
         },
     ]);

@@ -23,6 +23,21 @@
     </div>
 </section>
 
+<?php
+// Get and display promo content if enabled
+$promoRepository = $container->get(\App\Domain\Promo\BlogPromoRepository::class);
+$promo = $promoRepository->getPromo();
+if ($promo->isEnabled() && !empty($promo->getContent())): 
+?>
+<section class="py-4">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+            <?= $promo->getContent() ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <section class="py-12">
     <div class="container mx-auto px-4">
         <div class="max-w-3xl mx-auto">
