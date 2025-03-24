@@ -6,6 +6,7 @@ use App\Application\Actions\Blog\BlogAction;
 use App\Application\Actions\ContactAction;
 use App\Application\Actions\CV\CVAction;
 use App\Application\Actions\HomeAction;
+use App\Application\Actions\OneColumnAction;
 use App\Application\Actions\Admin\AuthController;
 use App\Application\Actions\Admin\BlogController;
 use App\Application\Actions\Admin\ContactController;
@@ -13,6 +14,7 @@ use App\Application\Actions\Admin\CVController;
 use App\Application\Actions\Admin\DashboardController;
 use App\Application\Actions\Admin\PartnerController;
 use App\Application\Actions\Admin\PromoController;
+use App\Application\Actions\Admin\SettingsController;
 use App\Application\Actions\Admin\SiteContentAction;
 use App\Application\Actions\Admin\WebhookController;
 use App\Application\Actions\Partner\PartnerRedirectAction;
@@ -33,6 +35,9 @@ return function (App $app) {
     
     $app->get('/contact', [ContactAction::class, 'showForm']);
     $app->post('/contact', [ContactAction::class, 'handleForm']);
+    
+    // The template is now controlled by the site settings
+    // $app->get('/profile', OneColumnAction::class);
     
     // Admin routes
     $app->get('/admin/login', [AuthController::class, 'loginPage']);
@@ -91,6 +96,10 @@ return function (App $app) {
         // Blog promo management
         $group->get('/promo', [PromoController::class, 'edit']);
         $group->post('/promo/update', [PromoController::class, 'update']);
+        
+        // Template settings management
+        $group->get('/settings', [SettingsController::class, 'index']);
+        $group->post('/settings/update', [SettingsController::class, 'update']);
     })->add(AuthMiddleware::class);
     
     // Error handling for 404 Not Found

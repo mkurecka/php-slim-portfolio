@@ -3,6 +3,7 @@
 namespace App\Application\Actions\Blog;
 
 use App\Application\Actions\BaseAction;
+use App\Application\Settings\SettingsInterface;
 use App\Domain\Blog\BlogRepository;
 use App\Infrastructure\Content\SiteContentService;
 use App\Infrastructure\Markdown\MarkdownService;
@@ -16,18 +17,21 @@ class BlogAction extends BaseAction
     private BlogRepository $blogRepository;
     private MarkdownService $markdownService;
     private ContainerInterface $container;
+    private SettingsInterface $settings;
 
     public function __construct(
         PhpRenderer $renderer, 
         BlogRepository $blogRepository,
         MarkdownService $markdownService,
         SiteContentService $contentService,
-        ContainerInterface $container
+        ContainerInterface $container,
+        SettingsInterface $settings
     ) {
         parent::__construct($renderer, $contentService);
         $this->blogRepository = $blogRepository;
         $this->markdownService = $markdownService;
         $this->container = $container;
+        $this->settings = $settings;
     }
 
     public function listPosts(Request $request, Response $response): Response
@@ -66,7 +70,23 @@ class BlogAction extends BaseAction
         // Get global content for the site name
         $globalContent = $this->contentService->getContent('global');
         
-        return $this->renderWithContent($response, 'blog/post.php', [
+        // Determine which template to use
+        $template = 'blog/post.php'; // Default template
+        
+        // Check query parameter first (overrides settings)
+        $queryParams = $request->getQueryParams();
+        if (isset($queryParams['template']) && $queryParams['template'] === 'simple') {
+            $template = 'blog/blog-simple.php';
+        } 
+        // Otherwise use the template from settings
+        else {
+            $templateSetting = $this->settings->get('templates')['blog'] ?? 'default';
+            if ($templateSetting === 'simple') {
+                $template = 'blog/blog-simple.php';
+            }
+        }
+        
+        return $this->renderWithContent($response, $template, [
             'title' => $post->getTitle() . ' | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
             'post' => $post,
             'markdownService' => $this->markdownService,

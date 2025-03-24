@@ -21,6 +21,10 @@ return function (ContainerBuilder $containerBuilder) {
                     'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
                 ],
+                'templates' => [
+                    'blog' => 'simple', // Options: 'default', 'simple'
+                    'site' => 'one-column', // Options: 'default', 'one-column'
+                ],
             ]);
         }
     ]);

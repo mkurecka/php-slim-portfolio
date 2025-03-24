@@ -103,6 +103,9 @@
             <a href="/admin/promo" class="block text-gray-700 hover:text-indigo-600 transition-colors">
                 <i class="fas fa-bullhorn mr-2"></i> Blog Promo Box
             </a>
+            <a href="/admin/settings" class="block text-gray-700 hover:text-indigo-600 transition-colors">
+                <i class="fas fa-cog mr-2"></i> Template Settings
+            </a>
             <a href="/" target="_blank" class="block text-gray-700 hover:text-indigo-600 transition-colors">
                 <i class="fas fa-external-link-alt mr-2"></i> View Website
             </a>

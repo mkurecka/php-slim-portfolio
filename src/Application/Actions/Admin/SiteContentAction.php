@@ -33,8 +33,16 @@ class SiteContentAction
         $section = $args['section'];
         $content = $this->contentService->getContent($section);
         
-        if (empty($content)) {
+        if (empty($content) && $section !== 'profile') {
             return $response->withStatus(404);
+        }
+        
+        // Special handling for profile section
+        if ($section === 'profile') {
+            return $this->renderer->render($response, 'admin/content/profile.php', [
+                'title' => 'Edit Profile Content | Admin',
+                'content' => $content
+            ]);
         }
         
         return $this->renderer->render($response, 'admin/content/edit.php', [
@@ -49,6 +57,27 @@ class SiteContentAction
         $section = $args['section'];
         $data = $request->getParsedBody();
         
+        // Special handling for profile section
+        if ($section === 'profile' && isset($data['content']) && is_array($data['content'])) {
+            $content = $data['content'];
+            $success = $this->contentService->updateSection($section, $content);
+            
+            if (!$success) {
+                return $this->renderer->render($response->withStatus(500), 'admin/content/profile.php', [
+                    'title' => 'Edit Profile Content | Admin',
+                    'content' => $content,
+                    'error' => 'Failed to save profile content changes.'
+                ]);
+            }
+            
+            return $this->renderer->render($response, 'admin/content/profile.php', [
+                'title' => 'Edit Profile Content | Admin',
+                'content' => $content,
+                'success' => true
+            ]);
+        }
+        
+        // Standard JSON content handling for other sections
         if (isset($data['content']) && is_string($data['content'])) {
             $content = json_decode($data['content'], true);
             

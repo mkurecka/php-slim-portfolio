@@ -76,7 +76,8 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get(BlogRepository::class),
                 $c->get(MarkdownService::class),
                 $c->get(App\Infrastructure\Content\SiteContentService::class),
-                $c
+                $c,
+                $c->get(SettingsInterface::class)
             );
         },
         
@@ -138,6 +139,27 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
         
+        // Home Action
+        App\Application\Actions\HomeAction::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\HomeAction(
+                $c->get(PhpRenderer::class),
+                $c->get(BlogRepository::class),
+                $c->get(App\Infrastructure\Content\SiteContentService::class),
+                $c->get(PartnerLinkRepository::class),
+                $c->get(SettingsInterface::class)
+            );
+        },
+        
+        // One Column Action
+        App\Application\Actions\OneColumnAction::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\OneColumnAction(
+                $c->get(PhpRenderer::class),
+                $c->get(BlogRepository::class),
+                $c->get(PartnerLinkRepository::class),
+                $c->get(App\Infrastructure\Content\SiteContentService::class)
+            );
+        },
+        
         // Blog Promo Repository
         BlogPromoRepository::class => function (ContainerInterface $c) {
             return new BlogPromoRepository();
@@ -148,6 +170,14 @@ return function (ContainerBuilder $containerBuilder) {
             return new App\Application\Actions\Admin\PromoController(
                 $c->get('admin.renderer'),
                 $c->get(BlogPromoRepository::class)
+            );
+        },
+        
+        // Settings Controller
+        App\Application\Actions\Admin\SettingsController::class => function (ContainerInterface $c) {
+            return new App\Application\Actions\Admin\SettingsController(
+                $c->get('admin.renderer'),
+                $c->get(SettingsInterface::class)
             );
         },
     ]);
