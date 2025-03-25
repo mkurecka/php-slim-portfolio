@@ -11,6 +11,13 @@
             <p class="text-gray-600 text-sm mt-1">Edit profile content for one-column template</p>
         </a>
         
+        <!-- One-column template section -->
+        <a href="/admin/content/one-column" 
+           class="block p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-indigo-50 hover:border-indigo-300 transition-colors">
+            <h3 class="font-medium text-lg capitalize">One-Column Template</h3>
+            <p class="text-gray-600 text-sm mt-1">Edit one-column template settings</p>
+        </a>
+        
         <?php foreach ($sections as $section): ?>
             <a href="/admin/content/<?= htmlspecialchars($section) ?>" 
                class="block p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-indigo-50 hover:border-indigo-300 transition-colors">

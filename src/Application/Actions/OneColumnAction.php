@@ -52,6 +52,7 @@ class OneColumnAction extends BaseAction
         // Get the site content
         $globalContent = $this->contentService->getContent('global');
         $profileContent = $this->contentService->getContent('profile') ?? [];
+        $templateSettings = $this->contentService->getContent('one-column') ?? [];
         
         // Prepare social links
         $socialLinks = [];
@@ -66,9 +67,10 @@ class OneColumnAction extends BaseAction
             'profile_image' => $profileContent['profile_image'] ?? null,
             'about_content' => $profileContent['about_content'] ?? null,
             'social_links' => $socialLinks,
-            'blog_posts' => array_slice($posts, 0, 5), // Show only the 5 most recent posts
-            'video_posts' => array_slice($videoPosts, 0, 3), // Show only the 3 most recent video posts
-            'partner_links' => $partnerLinks
+            'blog_posts' => $posts, // Pass all posts, the template will handle limiting
+            'video_posts' => $videoPosts, // Pass all video posts, the template will handle limiting
+            'partner_links' => $partnerLinks,
+            'template_settings' => $templateSettings // Pass the template settings
         ]);
     }
 }

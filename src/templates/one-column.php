@@ -1,4 +1,4 @@
-<section class="py-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+<section class="py-12 <?= $template_settings['header_bg_color'] ?? 'bg-gradient-to-r from-indigo-600 to-purple-600' ?> <?= $template_settings['header_text_color'] ?? 'text-white' ?>">
     <div class="container mx-auto px-4 text-center">
         <img src="<?= $profile_image ?? 'https://placehold.co/400x400/e2e8f0/a1a1aa?text=400+x+400' ?>" alt="Profile Image" class="w-32 h-32 rounded-full mx-auto mb-6">
         <h1 class="text-4xl font-bold mb-2"><?= $name ?? 'Jane Doe' ?></h1>
@@ -41,11 +41,15 @@
             </div>
         </div>
         
-        <?php if (isset($blog_posts) && !empty($blog_posts)): ?>
+        <?php if (isset($blog_posts) && !empty($blog_posts) && ($template_settings['show_blog_posts'] ?? '1') === '1'): ?>
         <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">Latest Blog Posts</h2>
             <div class="space-y-6">
-                <?php foreach ($blog_posts as $post): ?>
+                <?php 
+                $max_blog_posts = (int)($template_settings['max_blog_posts'] ?? 5);
+                $displayed_posts = array_slice($blog_posts, 0, $max_blog_posts);
+                foreach ($displayed_posts as $post): 
+                ?>
                 <div class="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
                     <div class="flex items-center text-gray-500 text-sm mb-2">
                         <span><?= htmlspecialchars($post->getDate()) ?></span>
@@ -72,11 +76,15 @@
         </div>
         <?php endif; ?>
         
-        <?php if (isset($video_posts) && !empty($video_posts)): ?>
+        <?php if (isset($video_posts) && !empty($video_posts) && ($template_settings['show_video_posts'] ?? '1') === '1'): ?>
         <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">Video Content</h2>
             <div class="space-y-6">
-                <?php foreach ($video_posts as $post): ?>
+                <?php 
+                $max_video_posts = (int)($template_settings['max_video_posts'] ?? 3);
+                $displayed_video_posts = array_slice($video_posts, 0, $max_video_posts);
+                foreach ($displayed_video_posts as $post): 
+                ?>
                 <div class="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
                     <?php if ($post->hasYoutubeVideo()): ?>
                     <div class="mb-4 rounded-lg overflow-hidden">
@@ -104,7 +112,7 @@
         </div>
         <?php endif; ?>
         
-        <?php if (isset($partner_links) && !empty($partner_links)): ?>
+        <?php if (isset($partner_links) && !empty($partner_links) && ($template_settings['show_partner_links'] ?? '1') === '1'): ?>
         <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">Affiliate Links</h2>
             <div class="space-y-4">

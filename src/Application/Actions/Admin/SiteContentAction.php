@@ -33,7 +33,7 @@ class SiteContentAction
         $section = $args['section'];
         $content = $this->contentService->getContent($section);
         
-        if (empty($content) && $section !== 'profile') {
+        if (empty($content) && $section !== 'profile' && $section !== 'one-column') {
             return $response->withStatus(404);
         }
         
@@ -41,6 +41,14 @@ class SiteContentAction
         if ($section === 'profile') {
             return $this->renderer->render($response, 'admin/content/profile.php', [
                 'title' => 'Edit Profile Content | Admin',
+                'content' => $content
+            ]);
+        }
+        
+        // Special handling for one-column template section
+        if ($section === 'one-column') {
+            return $this->renderer->render($response, 'admin/content/one-column.php', [
+                'title' => 'Edit One-Column Template | Admin',
                 'content' => $content
             ]);
         }
@@ -72,6 +80,26 @@ class SiteContentAction
             
             return $this->renderer->render($response, 'admin/content/profile.php', [
                 'title' => 'Edit Profile Content | Admin',
+                'content' => $content,
+                'success' => true
+            ]);
+        }
+        
+        // Special handling for one-column template section
+        if ($section === 'one-column' && isset($data['content']) && is_array($data['content'])) {
+            $content = $data['content'];
+            $success = $this->contentService->updateSection($section, $content);
+            
+            if (!$success) {
+                return $this->renderer->render($response->withStatus(500), 'admin/content/one-column.php', [
+                    'title' => 'Edit One-Column Template | Admin',
+                    'content' => $content,
+                    'error' => 'Failed to save template changes.'
+                ]);
+            }
+            
+            return $this->renderer->render($response, 'admin/content/one-column.php', [
+                'title' => 'Edit One-Column Template | Admin',
                 'content' => $content,
                 'success' => true
             ]);
