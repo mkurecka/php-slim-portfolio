@@ -28,13 +28,21 @@ return function (App $app) {
     // Main website routes
     $app->get('/', HomeAction::class);
     
+    // Blog routes - support both 'blog' and 'clanky'
     $app->get('/blog', [BlogAction::class, 'listPosts']);
+    $app->get('/clanky', [BlogAction::class, 'listPosts']);
     $app->get('/blog/{slug}', [BlogAction::class, 'showPost']);
+    $app->get('/clanky/{slug}', [BlogAction::class, 'showPost']);
     
+    // CV routes - support both 'cv' and 'zivotopis'
     $app->get('/cv', [CVAction::class, 'showCV']);
+    $app->get('/zivotopis', [CVAction::class, 'showCV']);
     
+    // Contact routes - support both 'contact' and 'kontakt'
     $app->get('/contact', [ContactAction::class, 'showForm']);
+    $app->get('/kontakt', [ContactAction::class, 'showForm']);
     $app->post('/contact', [ContactAction::class, 'handleForm']);
+    $app->post('/kontakt', [ContactAction::class, 'handleForm']);
     
     // The template is now controlled by the site settings
     // $app->get('/profile', OneColumnAction::class);
