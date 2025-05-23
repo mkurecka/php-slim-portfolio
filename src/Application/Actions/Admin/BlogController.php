@@ -19,7 +19,7 @@ class BlogController
     {
         $this->renderer = $renderer;
         $this->blogRepository = $blogRepository;
-        $this->uploadsDir = __DIR__ . '/../../../../public/uploads/blog';
+        $this->uploadsDir = __DIR__ . '/../../../../data/images';
         
         // Create uploads directory if it doesn't exist
         if (!is_dir($this->uploadsDir)) {
@@ -125,8 +125,8 @@ class BlogController
         if (isset($data['remove_featured_image']) && $data['remove_featured_image'] === 'on') {
             $featuredImage = null;
             // Delete the file if it's a local file
-            if ($post->hasFeaturedImage() && strpos($post->getFeaturedImage(), '/uploads/blog/') !== false) {
-                $filePath = __DIR__ . '/../../../../public' . $post->getFeaturedImage();
+            if ($post->hasFeaturedImage() && strpos($post->getFeaturedImage(), '/data/images/') !== false) {
+                $filePath = __DIR__ . '/../../../../' . ltrim($post->getFeaturedImage(), '/');
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
@@ -139,8 +139,8 @@ class BlogController
         // Check if an image was uploaded
         elseif (isset($uploadedFiles['featured_image']) && $uploadedFiles['featured_image']->getError() === UPLOAD_ERR_OK) {
             // Delete the old image if it exists and is a local file
-            if ($post->hasFeaturedImage() && strpos($post->getFeaturedImage(), '/uploads/blog/') !== false) {
-                $filePath = __DIR__ . '/../../../../public' . $post->getFeaturedImage();
+            if ($post->hasFeaturedImage() && strpos($post->getFeaturedImage(), '/data/images/') !== false) {
+                $filePath = __DIR__ . '/../../../../' . ltrim($post->getFeaturedImage(), '/');
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
@@ -172,8 +172,8 @@ class BlogController
         $post = $this->blogRepository->findById($id);
         
         // Delete the featured image if it exists and is a local file
-        if ($post && $post->hasFeaturedImage() && strpos($post->getFeaturedImage(), '/uploads/blog/') !== false) {
-            $filePath = __DIR__ . '/../../../../public' . $post->getFeaturedImage();
+        if ($post && $post->hasFeaturedImage() && strpos($post->getFeaturedImage(), '/data/images/') !== false) {
+            $filePath = __DIR__ . '/../../../../' . ltrim($post->getFeaturedImage(), '/');
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
@@ -196,7 +196,7 @@ class BlogController
         
         $uploadedFile->moveTo($this->uploadsDir . DIRECTORY_SEPARATOR . $filename);
         
-        return '/uploads/blog/' . $filename;
+        return '/data/images/' . $filename;
     }
     
     /**
@@ -251,6 +251,6 @@ class BlogController
         // Save the image
         file_put_contents($filePath, $imageData);
         
-        return '/uploads/blog/' . $filename;
+        return '/data/images/' . $filename;
     }
 }
