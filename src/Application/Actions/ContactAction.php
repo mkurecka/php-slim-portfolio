@@ -36,7 +36,7 @@ class ContactAction extends BaseAction
             'title' => 'Contact | ' . ($globalContent['site_name'] ?? 'Michal Kurecka'),
             'content' => $contactContent,
             'contact_info' => $contactInfo
-        ]);
+        ], $request);
     }
     
     public function handleForm(Request $request, Response $response): Response
@@ -59,7 +59,7 @@ class ContactAction extends BaseAction
                 'error' => 'All fields are required.',
                 'content' => $contactContent,
                 'contact_info' => $contactInfo
-            ]);
+            ], $request);
         }
         
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -68,7 +68,7 @@ class ContactAction extends BaseAction
                 'error' => 'Please enter a valid email address.',
                 'content' => $contactContent,
                 'contact_info' => $contactInfo
-            ]);
+            ], $request);
         }
         
         // Create and save the contact submission
@@ -81,7 +81,7 @@ class ContactAction extends BaseAction
                 'error' => 'There was an error saving your message. Please try again later.',
                 'content' => $contactContent,
                 'contact_info' => $contactInfo
-            ]);
+            ], $request);
         }
         
         // Send to webhook if enabled
@@ -103,6 +103,6 @@ class ContactAction extends BaseAction
             'success' => $successMessage,
             'content' => $contactContent,
             'contact_info' => $contactInfo
-        ]);
+        ], $request);
     }
 }

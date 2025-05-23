@@ -8,6 +8,7 @@ use App\Domain\Blog\BlogRepository;
 use App\Domain\CV\CVService;
 use App\Domain\Partner\PartnerLinkRepository;
 use App\Domain\Promo\BlogPromoRepository;
+use App\Infrastructure\Locale\LocaleService;
 use App\Infrastructure\Markdown\MarkdownService;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
@@ -67,6 +68,11 @@ return function (ContainerBuilder $containerBuilder) {
         // Markdown service
         MarkdownService::class => function (ContainerInterface $c) {
             return new MarkdownService();
+        },
+        
+        // Locale service
+        LocaleService::class => function (ContainerInterface $c) {
+            return new LocaleService();
         },
         
         // Blog Action
