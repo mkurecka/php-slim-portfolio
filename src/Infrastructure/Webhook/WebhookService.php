@@ -235,7 +235,7 @@ class WebhookService
         }
         
         // Set up uploads directory
-        $uploadsDir = __DIR__ . '/../../../public/uploads/blog';
+        $uploadsDir = __DIR__ . '/../../../data/images';
         if (!is_dir($uploadsDir)) {
             mkdir($uploadsDir, 0755, true);
         }
@@ -276,7 +276,7 @@ class WebhookService
         // Save the image
         file_put_contents($filePath, $imageData);
         
-        return '/uploads/blog/' . $filename;
+        return '/data/images/' . $filename;
     }
     
     /**

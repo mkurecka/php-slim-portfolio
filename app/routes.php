@@ -63,6 +63,40 @@ return function (App $app) {
     // API Webhook routes
     $app->post('/api/webhook/blog', [WebhookController::class, 'handleBlogWebhook']);
     
+    // Route to serve images from data directory
+    $app->get('/data/images/{filename}', function (Request $request, Response $response, array $args) {
+        $filename = $args['filename'];
+        $filePath = __DIR__ . '/../data/images/' . $filename;
+        
+        // Security check - prevent directory traversal
+        if (strpos($filename, '..') !== false || strpos($filename, '/') !== false) {
+            return $response->withStatus(404);
+        }
+        
+        // Check if file exists
+        if (!file_exists($filePath) || !is_file($filePath)) {
+            return $response->withStatus(404);
+        }
+        
+        // Get file info
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->file($filePath);
+        
+        // Only serve image files
+        if (strpos($mimeType, 'image/') !== 0) {
+            return $response->withStatus(404);
+        }
+        
+        // Read and serve the file
+        $fileContent = file_get_contents($filePath);
+        $response->getBody()->write($fileContent);
+        
+        return $response
+            ->withHeader('Content-Type', $mimeType)
+            ->withHeader('Content-Length', (string)filesize($filePath))
+            ->withHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+    });
+    
     // Protected admin routes
     $app->group('/admin', function ($group) {
         $group->get('/dashboard', [DashboardController::class, 'index']);
